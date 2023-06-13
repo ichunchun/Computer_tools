@@ -97,6 +97,10 @@ else if (RoomNum = "204")
 {
     IP_Three := "192.168.23."
 }
+else if (RoomNum = "501")
+    {
+        IP_Three := "192.168.35."
+    }
 
 if (Row = "A")
 {
@@ -121,6 +125,11 @@ if (Row = "D")
 if (Row = "E")
 {
     IP_Four := Start + (offset * 4) + 100
+    IP_Config := IP_Three IP_Four
+}
+if (Row = "F")
+{
+    IP_Four := Start + (offset * 5) + 100
     IP_Config := IP_Three IP_Four
 }
 计算机名称 := RoomNum Row Start
@@ -148,16 +157,19 @@ IP地址 := MyGui.Add("Text", "w290 h50 + 0x200 + Center + 0x1000 xs Section", I
 ; MyGui.Add("Text", "w135 h50 + 0x200 + Center + 0x1000 ys", IP)
 C_Config := MyGui.Add("Text", "w290 w290 h50 + 0x200 + Center + 0x1000 Section xs", "Config:  " 计算机名称 "   /   " IP_Config)
 myGui.SetFont("s9", "Segoe UI")
-Row_A := MyGui.Add("Button", "w46 Section y+25", "A")
+Row_A := MyGui.Add("Button", "w30 Section y+25", "A")
 Row_A.OnEvent("Click", A组)
-Row_B := MyGui.Add("Button", "w46 ys", "B")
+Row_B := MyGui.Add("Button", "w37 ys", "B")
 Row_B.OnEvent("Click", B组)
-Row_C := MyGui.Add("Button", "w46 ys", "C")
+Row_C := MyGui.Add("Button", "w37 ys", "C")
 Row_C.OnEvent("Click", C组)
-Row_D := MyGui.Add("Button", "w46 ys", "D")
+Row_D := MyGui.Add("Button", "w37 ys", "D")
 Row_D.OnEvent("Click", D组)
-Row_E := MyGui.Add("Button", "w46 ys", "E")
+Row_E := MyGui.Add("Button", "w37 ys", "E")
 Row_E.OnEvent("Click", E组)
+Row_F := MyGui.Add("Button", "w37 ys", "F")
+Row_F.OnEvent("Click", F组)
+
 手改 := MyGui.Add("Button", "w138 h32 Section xs", "手动修改")
 手改.OnEvent("Click", 手动修改)
 自改 := MyGui.Add("Button", "w138 h32 ys", "自动修改")
@@ -176,7 +188,7 @@ Row_E.OnEvent("Click", E组)
 删权.OnEvent("Click", 删除授权)
 提权 := MyGui.Add("Button", "w290 h32 Section xs", 权限情况)
 提权.OnEvent("Click", 提升权限)
-底栏 := MyGui.Add("StatusBar", , "      本工具由郑信商学院夏岩老师编写。")
+底栏 := MyGui.Add("StatusBar", , "      本工具由郑信信息中心老师编写。")
 MyGui.Show
 
 手动修改(*)
@@ -251,6 +263,18 @@ E组(*)
     C_Config.Text := "Config:  " RoomNum Row Start "   /   " IP_Three IP_Four
 }
 
+F组(*)
+{
+    IniWrite("F", "config.ini", "Room", "Row")
+    IniWrite("1", "config.ini", "Room", "Start")
+    Row := IniRead("config.ini", "Room", "Row")
+    Start := IniRead("config.ini", "Room", "Start")
+    IP_Four := Start + (offset * 5) + 100
+    C_Config.Opt ("c0xFF0000")
+    C_Config.Text := "Config:  " RoomNum Row Start "   /   " IP_Three IP_Four
+}
+
+
 自动修改(*)
 {
     Row := IniRead("config.ini", "Room", "Row")
@@ -281,6 +305,12 @@ E组(*)
         IP_Four := Start + (offset * 4) + 100
         IP_Config := IP_Three IP_Four
     }
+    if (Row = "F")
+    {
+        IP_Four := Start + (offset * 5) + 100
+        IP_Config := IP_Three IP_Four
+    }
+
     计算机名称 := RoomNum Row Start
     CMD改IP及DNS(adapter, IP_Config, mask, gateway, dns)
     注册表改计算机名称(计算机名称)
